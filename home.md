@@ -127,7 +127,8 @@ With the username set, I simply interacted with the bot by sending the command:
 
 
 
+
 ## Post-Exploitation
-Once i obtained a reberse shell, i had access to all the files of user-a, included the file server_start.sh that i could modify.
+Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
 
-
+![Nat Configuration](images/Initial_Access.png)
