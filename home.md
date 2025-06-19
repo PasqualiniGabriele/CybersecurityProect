@@ -36,6 +36,9 @@ Since this script is executed by the game server process running under `user-b`,
 
 ## Attacker Setup
 The Attacker uses 2 netcat processes, one listening on 8080, the other on 8081.
+#### Nat Configuration
+![Nat Configuration](images/Nat_Configuration.png)
+
 #### Server process 1
 ```
 while true; do
