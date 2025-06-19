@@ -4,7 +4,7 @@
 ---
 
 
-## Introductionaaa
+## Introduction
 I own a personal server that hosts both a game server and a Discord bot, which provides various functionalities to players, such as displaying game statistics, rolling dice, and many others.
 
 The Discord bot is a program that continuously listens to messages in a designated chat channel and executes commands or functions depending on the message content.
