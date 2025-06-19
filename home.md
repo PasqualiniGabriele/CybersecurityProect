@@ -45,7 +45,7 @@ Since this script is executed by the game server process running under `user-b`,
 
 
 ## Threat model
-- Attacker has access to send messages in the Discord chat monitored by the bot.  
+- Attacker has access to send messages in the Discord chat monitored by the bot.
 - Attacker is aware of the injection vulnerability in the bot’s username handling.
   
 
