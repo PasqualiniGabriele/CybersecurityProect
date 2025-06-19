@@ -144,7 +144,7 @@ But i did not have access rights to user-b folder, containing the game server's 
 
 ---
 
-## Privilege Escalation
+## Privilege Escalation + Persistence
 
 One way to gain access to the `/home/user-b` files was to modify the `server_start.sh` script. Since this script is executed by a cron job with the `@reboot` directive, any modification would be executed automatically on the next server reboot, running with `user-b`'s privileges.
 
