@@ -187,9 +187,9 @@ echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92Zgdr
 ```  
 
 
-This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.
+This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.  
   
-----
+---
 
 ## Server Restart
 
