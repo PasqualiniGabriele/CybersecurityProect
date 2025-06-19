@@ -34,7 +34,7 @@ if message.content.startswith('!dice'):
 Since the code is executed in a shell, inserting a ; in the username allows the shell to treat what follows as a separate command instead of passing it as a parameter to logWriter.py.
 
 
-### Misconficuration
+### Misconfiguration
 In addition to the code injection vulnerability, the system also presented a misconfiguration related to file permissions. The `server_start.sh` script, which is executed at system startup via a crontab entry belonging to `user-b`, was located inside `user-a`'s home directory with permissions set to `rwxrwxrwx`, allowing any user on the system to modify it.
 
 Since this script is executed by the game server process running under `user-b`, modifying its content and then restarting the server makes it possible to execute arbitrary code with `user-b`'s privileges, ultimately granting access to the game server files.
@@ -70,9 +70,9 @@ done
 ```
 clear
 nc -lvnp 8081
-```  
+```
+In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.  
 
-In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.
 ---
 ## Exploit
 
