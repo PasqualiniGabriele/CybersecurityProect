@@ -57,6 +57,7 @@ The Attacker uses 2 netcat processes, one listening on 8080, the other on 8081.
 #### Nat Configuration
 ![Nat Configuration](images/Nat_Configuration.png)
 
+
 ### Server process 1
 
 ```
@@ -72,7 +73,7 @@ done
 clear
 nc -lvnp 8081
 ```
-
+---
 In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1`.
 
 ---
