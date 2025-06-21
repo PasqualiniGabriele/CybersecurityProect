@@ -137,10 +137,10 @@ With the username set, the attacker can trigger the exploit by sending the comma
 ## Post-Exploitation
 Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
 
-![Nat Configuration](images/Initial_Access.png)
+![](images/Initial_Access.png)
 
 But i did not have access rights to user-b folder, containing the game server's files
-![Nat Configuration](images/Screenshot_tree.png)
+![](images/Screenshot_tree.png)
 
 ---
 
