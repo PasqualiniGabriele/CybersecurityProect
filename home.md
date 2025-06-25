@@ -193,6 +193,11 @@ Once the server rebooted, the injected code ran with `user-b` privileges, granti
 
 ## References
 
-The code for the reverse shell was taken from the course lectures.  
-Netcat was used to set up the servers for the code injection and for the reverse shell.  
-ChatGPT was used as a support for the writing of this report.
+The code for the reverse shell and netcat was taken from the course lectures. 
+ssh guide used: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server
+
+### Tools used
+Netcat was used to set up the servers for the code injection and for the reverse shell.
+Curl was used to expand the payload dimensions.
+ssh-keygen was used to generate the key pair
+ChatGPT was used as a support for the writing of this report.  
