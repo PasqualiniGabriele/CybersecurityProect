@@ -195,4 +195,6 @@ Once the server rebooted, the injected code ran with `user-b` privileges, granti
 
 The code for the reverse shell was taken from the course lectures.  
 Netcat was used to set up the servers for the code injection and for the reverse shell.  
-ChatGPT was used to write the Discord Bot in python and as a support for the writing of this report.test
+ChatGPT was used to write the Discord Bot in python and as a support for the writing of this report.
+
+## Test
