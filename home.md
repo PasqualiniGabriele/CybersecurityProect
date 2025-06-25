@@ -5,11 +5,10 @@
 
 
 ## Introduction
-I own a personal server that hosts both a game server and a Discord bot, which provides various functionalities to players, such as displaying game statistics, rolling dice, and many others.
+I own a server that hosts both a personal game server and a Discord bot, which provides various functionalities to players, such as displaying game statistics, rolling dice, and more.
+The Discord bot is a program, written in python, that continuously listens to messages in a designated chat channel and executes commands or functions depending on the message content.
 
-The Discord bot is a program that continuously listens to messages in a designated chat channel and executes commands or functions depending on the message content.
-
-During a Cybersecurity course, I discovered a vulnerability in the Discord bot’s Python code that allows remote code execution without requiring user interaction. Exploiting this flaw, combined with a misconfiguration in the file permissions of a script, I was able to gain unauthorized access to the game server’s files.
+Last year I wrote the Discord bot's code using ChatGPT to support a Minecraft server to play with friends, but during the Cybersecurity course, I discovered a vulnerability in the code that allows remote code execution without requiring user interaction. Therefore in this report I decided to simulate an attack that aims to obtain unauthorized access to the game files exploiting the vulnerability and a permission misconfiguration.
 
 
 
@@ -189,3 +188,11 @@ This ensured that, upon the next reboot, the server would automatically add the 
 
 After modifying the `server_start.sh` script to include the attacker’s public SSH key, it was necessary to wait for the server to restart in order to trigger the cron job execution.
 Once the server rebooted, the injected code ran with `user-b` privileges, granting persistent access to the game server files and enabling SSH login as `user-b`.
+
+---
+
+## References
+
+The code for the reverse shell was taken from the course lectures.
+Netcat was used to set up the servers for the code injection and for the reverse shell.
+ChatGPT was used to write the Discord Bot in python and as a support for the writing of this report.
