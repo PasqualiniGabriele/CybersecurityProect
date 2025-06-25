@@ -193,7 +193,7 @@ Once the server rebooted, the injected code ran with `user-b` privileges, granti
 
 ## References
 
-The code for the reverse shell and netcat was taken from the course lectures.  
+The code for the reverse shell and netcat listeners was taken from the course lectures.  
 ssh guide used: https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server.  
 
 
