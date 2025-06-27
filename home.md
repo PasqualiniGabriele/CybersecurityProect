@@ -13,7 +13,7 @@ Last year I wrote the Discord bot's code using ChatGPT to support a Minecraft se
 
 
 
-### Server Enviroment
+### Server Environment
 The game server and the Discord bot are running under two different system users to enforce a basic privilege separation:
 
 - The Discord bot runs under `user-a`.
@@ -21,7 +21,7 @@ The game server and the Discord bot are running under two different system users
 
 
 ### Vulnerability
-The Vulnerability is a line in the code of the funcion "dice" that permits code injection by changing the username of the Discord Accounts
+The Vulnerability is a line in the code of the function "dice" that permits code injection by changing the username of the Discord accounts
 ```python
 if message.content.startswith('!dice'):
     dice = random.randint(1,6)
@@ -73,7 +73,7 @@ clear
 nc -lvnp 8081
 ```
 
-In the response.txt file there is the payload that the attacker wants to execute, wich is sent as a response to http get requests to `process 1` .
+In the response.txt file there is the payload that the attacker wants to execute, which is sent as a response to http get requests to `process 1` .
 
 ---
 
@@ -81,7 +81,7 @@ In the response.txt file there is the payload that the attacker wants to execute
 ## Exploit
 
 
-The desired payload can not always be injected directly through the username due to the 32-character limit (including spaces).
+The desired payload cannot always be injected directly through the username due to the 32-character limit (including spaces).
 To work around this limitation, a remote listener was set up to serve the full payload.  
 The exploit injects a command in the username that makes the bot fetch and execute code from a remote `response.txt` file.
 The username used for this injection was:
@@ -134,11 +134,11 @@ With the username set, the attacker can trigger the exploit by sending the comma
 ---
 
 ## Post-Exploitation
-Once i obtained a reberse shell, and i was able to navigate inside the user-a folder, accessing all doscord bot's files, including user-b's script `server_start.sh`
+Once I obtained a reverse shell, and i was able to navigate inside the 'user-a''s folder, accessing all Discord bot's files, including user-b's script `server_start.sh`
 
 ![](images/Initial_Access.png)
 
-But i did not have access rights to user-b folder, containing the game server's files
+But I did not have access rights to user-b folder, containing the game server's files
 ![](images/Screenshot_tree.png)
 
 ---
