@@ -134,7 +134,7 @@ With the username set, the attacker can trigger the exploit by sending the comma
 ---
 
 ## Post-Exploitation
-Once I obtained a reverse shell, and i was able to navigate inside the 'user-a''s folder, accessing all Discord bot's files, including user-b's script `server_start.sh`
+Once I obtained a reverse shell, and i was able to navigate inside the `user-a`'s folder, accessing all Discord bot's files, including user-b's script `server_start.sh`
 
 ![](images/Initial_Access.png)
 
@@ -199,6 +199,6 @@ ssh guide used: https://www.digitalocean.com/community/tutorials/how-to-configur
 
 ### Tools used
 Netcat was used to set up the servers for the code injection and for the reverse shell.  
-Curl was used as injection to expand the payload dimensions.  
+Curl was used for injection to expand the payload dimensions.  
 ssh-keygen was used to generate the key pair.  
-ChatGPT was used as a support for the writing of this report.  
+ChatGPT was used as a support for writing this report.  
